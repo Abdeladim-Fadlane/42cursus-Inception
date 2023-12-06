@@ -1,0 +1,92 @@
+version: '3.7'
+
+services:
+  database :
+    image : mariadb
+    container_name: mariadb
+    env_file: .env
+    volumes: 
+      - mariadb:/var/lib/mysql
+    networks: 
+      - inception
+    build: requirements/mariadb
+    restart: always
+
+  nginx:
+    image: nginx
+    container_name: nginx
+    env_file: .env
+    volumes: 
+      - wordpress:/var/www/wordpress
+    networks: 
+      - inception
+    depends_on: 
+      - database
+    build: requirements/nginx
+    ports: 
+      - "443:443"
+    restart: always
+
+  wordpress :
+    image: wordpress
+    container_name: wordpress
+    env_file: .env
+    volumes: 
+      - wordpress:/var/www/wordpress
+    networks: 
+      - inception
+    depends_on: 
+      - database
+    build: requirements/wordpress
+    restart: always
+
+  website :
+    image: website
+    container_name: website
+    build: requirements/bonus/static website
+    restart : always
+    ports:
+      - 8443:443
+  
+  adminer :
+    image: adminer
+    container_name: adminer
+    depends_on:
+      - database
+    build: requirements/bonus/Adminer
+    restart : always
+    ports:
+      - 8080:8080
+    networks:
+      - inception
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/home/afadlane/data/wordpress'
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: 'none' 
+      o: 'bind'
+      device: '/home/afadlane/data/mariadb'
+
+
+networks:
+  inception:
+    name: inception
+    driver: bridge
