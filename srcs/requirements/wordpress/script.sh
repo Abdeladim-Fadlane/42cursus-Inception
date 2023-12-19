@@ -1,7 +1,5 @@
 #!/bin/sh
 
-mkdir /run/php/
-
 # Wait for MariaDB to be ready
 
 while ! mariadb -h mariadb -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" ; do

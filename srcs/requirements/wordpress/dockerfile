@@ -1,7 +1,7 @@
 FROM debian:11
 
 RUN apt-get -y update && apt-get -y upgrade && apt -y install wget
-
+RUN mkdir /run/php/
 WORKDIR /var/www/
 
 RUN apt-get install -y php\
