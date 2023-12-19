@@ -8,11 +8,13 @@ RUN apt-get install -y php\
     php-fpm\
     php-mysql\
     mariadb-client
-# FastCGI Process Manager.handle PHP-based web applications.
-COPY ./script.sh /var/www/
+# PHP-FPM:FastCGI Process Manager:handle PHP-based web applications.
+# php-mysql : extention for intract betwen php and mysql db .
+# intraction mean that queries exuye by PHP script.
+# mariadb-client : CMD line tool allow usr to coonect db .
+COPY ./script.sh .
 
 COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
-
 
 RUN  chmod 777  /var/www/script.sh
 
@@ -20,15 +22,10 @@ RUN wget https://wordpress.org/latest.tar.gz && \
     tar -xzvf latest.tar.gz && \
     rm -fr latest.tar.gz
 
-
-COPY ./conf/wp-config.php /var/www/wordpress
-
 EXPOSE 9000
 
 RUN wget https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
-RUN chmod +x wp-cli.phar
+RUN chmod 777 wp-cli.phar
 RUN mv wp-cli.phar /usr/local/bin/wp
-
-RUN		chown -R root:root /var/www/wordpress
 
 CMD ["/var/www/script.sh"]

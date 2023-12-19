@@ -1,14 +1,18 @@
 #!/bin/sh
-
 mkdir /run/php/
-apt update -y
-
 # Wait for MariaDB to be ready
-until mysql -h mariadb -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" -e "SELECT 1;" ; do
-    echo "Waiting for Mariadb ...";
-    sleep 1
+while ! mariadb -h mariadb -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" ; do
+    echo "Establishing a database connection  ...";
+    sleep 3
 done
 
+wp config create	--allow-root \
+    --dbname=$MYSQL_DATABASE \
+    --dbuser=$MYSQL_USER \
+    --dbpass=$MYSQL_PASSWORD \
+    --dbhost=mariadb:3306 \
+    --path='/var/www/wordpress'
+    
 # WordPress installation
 wp core install --allow-root \
     --url="$DOMINE_NAME" \
@@ -24,5 +28,5 @@ wp user create --allow-root "$WP_USER"\
     --user_pass="$WP_USER_PW"\
     --path="/var/www/wordpress"
 
-# Start PHP-FPM
+# Start PHP-FPM AND  run PHP-FPM in the foreground NOT DAEMON
 php-fpm7.4 -F

@@ -40,35 +40,6 @@ services:
     build: requirements/wordpress
     restart: always
 
-  website :
-    image: website
-    container_name: website
-    build: requirements/bonus/static website
-    restart : always
-    ports:
-      - 8443:443
-  
-  adminer :
-    image: adminer
-    container_name: adminer
-    depends_on:
-      - database
-    build: requirements/bonus/Adminer
-    restart : always
-    ports:
-      - 8080:8080
-    networks:
-      - inception
-
-  portainer:
-    image: portainer/portainer-ce:latest
-    container_name: portainer
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-
-  
 volumes:
   wordpress:
     name: wordpress
@@ -85,8 +56,7 @@ volumes:
       o: 'bind'
       device: '/home/afadlane/data/mariadb'
 
-
 networks:
   inception:
-    name: inception
-    driver: bridge
+    name : inception
+    driver : bridge

@@ -8,8 +8,8 @@ RUN apt -y install mariadb-server
 
 COPY conf/mariadb.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-COPY ./tools/script.sh /var/tools/setup.sh 
+COPY ./script.sh /var/script.sh 
 
-RUN chmod 777 /var/tools/setup.sh
+RUN chmod 777 /var/script.sh
 
-CMD ["/var/tools/setup.sh"]
+CMD ["/var/script.sh"]
