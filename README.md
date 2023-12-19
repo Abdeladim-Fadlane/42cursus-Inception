@@ -8,5 +8,4 @@ Welcome to the Docker System Administration project! This project is designed to
 
 To provide a visual representation of the project's architecture, here is a sample code snippet for embedding an image:
 
-```markdown
-![Inception Diagram](/tools/42inceptionRecap.png)
+![Sample Image](/tools/42inceptionRecap.png)
