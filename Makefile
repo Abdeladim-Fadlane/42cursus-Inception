@@ -8,8 +8,7 @@ run :
 	docker-compose -f srcs/docker-compose.yml up -d 
 
 re: clean all
-# -v remove assoiate volumes.
-# -d detach mode backround.
+
 clean:  
 	docker compose -f ./srcs/docker-compose.yml down -v 
 
