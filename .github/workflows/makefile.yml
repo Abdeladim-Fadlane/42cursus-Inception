@@ -17,14 +17,20 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y autoconf automake libtool
 
-    - name: Generate configure script if not present
+    - name: Generate configure script if configure.ac is present and configure is not
       run: |
-        if [ ! -f ./configure ]; then
+        if [ -f ./configure.ac ] && [ ! -f ./configure ]; then
           autoreconf -i
         fi
 
-    - name: Make configure executable
-      run: chmod +x configure
+    - name: Make configure executable if it exists
+      run: |
+        if [ -f ./configure ]; then
+          chmod +x ./configure
+        else
+          echo "Error: configure script not found and could not be generated."
+          exit 1
+        fi
 
     - name: Run configure
       run: ./configure
@@ -37,4 +43,3 @@ jobs:
 
     - name: Run distcheck
       run: make distcheck
-
