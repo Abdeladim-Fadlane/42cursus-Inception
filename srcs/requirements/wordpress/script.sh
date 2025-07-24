@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Wait for MariaDB to be ready
+sed -i "s|listen = /run/php/php7.4-fpm.sock|listen = wordpress:9000|" /etc/php/7.4/fpm/pool.d/www.conf
 
 while ! mariadb -h mariadb -u"$MYSQL_USER" -p"$MYSQL_PASSWORD" ; do
     echo "Establishing a database connection  ...";

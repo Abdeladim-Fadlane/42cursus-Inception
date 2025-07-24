@@ -1,3 +1,0 @@
-[mysqld]
-bind_address=*
-

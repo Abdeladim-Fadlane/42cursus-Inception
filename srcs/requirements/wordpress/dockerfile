@@ -1,20 +1,22 @@
 FROM debian:11
 
 RUN apt-get -y update && apt-get -y upgrade && apt -y install wget
-RUN mkdir /run/php/
-WORKDIR /var/www/
+
+# PHP-FPM:FastCGI Process Manager:handle PHP-based web applications.
+# php-mysql : extention for intract betwen php and mysql db .
+# intraction mean that queries exuye by PHP script.
+# mariadb-client : CMD line tool allow usr to coonect db .
 
 RUN apt-get install -y php\
     php-fpm\
     php-mysql\
     mariadb-client
-# PHP-FPM:FastCGI Process Manager:handle PHP-based web applications.
-# php-mysql : extention for intract betwen php and mysql db .
-# intraction mean that queries exuye by PHP script.
-# mariadb-client : CMD line tool allow usr to coonect db .
-COPY ./script.sh .
 
-COPY ./conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
+WORKDIR /var/www/
+
+RUN mkdir /run/php/
+
+COPY ./script.sh .
 
 RUN  chmod 777  /var/www/script.sh
 
