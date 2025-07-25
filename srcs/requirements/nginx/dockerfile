@@ -3,7 +3,8 @@ FROM debian:11
 RUN apt -y update && apt -y upgrade
 RUN apt install -y nginx 
 RUN apt install -y openssl 
-
+# delete default nginx conf
+RUN rm -rf /etc/nginx/sites-enabled/default
 RUN mkdir -p /etc/nginx/ssl 
 
 #subj disable propmp of openssl cmd.

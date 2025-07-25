@@ -6,18 +6,18 @@ services:
     container_name: mariadb
     env_file: .env
     volumes: 
-      - ./mariadb:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     networks: 
       - inception
     build: requirements/mariadb
     restart: always
 
-  reverse-proxy:
+  reverse-proxy :
     image: nginx
     container_name: reverse-proxy
     env_file: .env
     volumes: 
-      - ./wordpress:/var/www/wordpress
+      - wordpress:/var/www/wordpress
     networks: 
       - inception
     depends_on: 
@@ -32,24 +32,41 @@ services:
     container_name: wordpress
     env_file: .env
     volumes: 
-      - ./wordpress:/var/www/wordpress
+      - wordpress:/var/www/wordpress
     networks: 
       - inception
     depends_on: 
       - database
     build: requirements/wordpress
     restart: always
+  
   phpmyadmin:
     image: phpmyadmin
     container_name: phpmyadmin
     env_file: .env
-    ports:
+    ports: 
       - "8080:80"
-    networks:
+    networks: 
       - inception
-    depends_on:
+    depends_on: 
       - database
     restart: always
+
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '/root/inception/srcs/wordpress'
+  mariadb:
+    name: mariadb
+    driver: local
+    driver_opts:
+      type: 'none' 
+      o: 'bind'
+      device: '/root/inception/srcs/mariadb'
 
 networks:
   inception:
